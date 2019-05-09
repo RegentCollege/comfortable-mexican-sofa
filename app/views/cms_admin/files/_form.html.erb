@@ -1,5 +1,5 @@
 <%= form.text_field :label %>
-<%= form.file_field :file, :multiple => @file.new_record? %>
+<%= form.file_field :file %>
 
 <% unless @file.new_record? %>
   <%= form.simple_field t('.current_file'), nil do %>
