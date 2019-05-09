@@ -16,20 +16,15 @@ class CmsAdmin::FilesController < CmsAdmin::BaseController
   def create
     respond_to do |format|
       format.html do
-        @file = @site.files.new
-        file_array  = params[:file][:file] || [nil]
-        label       = params[:file][:label]
-        
-        file_array.each_with_index do |file, i|
-          file_params = params[:file].merge(:file => file)
-          if file_array.size > 1 && file_params[:label].present?
-            label = file_params[:label] + " #{i + 1}"
-          end
-          @file = @site.files.create!(file_params.merge(:label => label))
-        end
-        
-        flash[:notice] = I18n.t('cms.files.created')
-        redirect_to :action => :edit, :id => @file
+				file = params[:file][:file]
+				if file.present?
+					@file = @site.files.create!(params[:file])
+					flash[:notice] = I18n.t('cms.files.created')
+					redirect_to :action => :edit, :id => @file
+				else
+					flash[:error] = I18n.t('cms.files.creation_failure')
+					redirect_to :action => :new
+				end
       end
       format.js do
         # FIX: No idea why this cannot be simulated in the test
